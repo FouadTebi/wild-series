@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}- Programs
+{% endblock %}
+
+{% block body %}
+    {# templates/category/index.html.twig #}
+
+    {% for category in categories %}
+        <h2>{{ category.name }}</h2>
+        <p><a href="{{ path('category_show', {'categoryName': category.name}) }}">Voir les séries</a></p>
+
+        <a href="{{ path('app_index') }}">
+            Retour à l'accueil
+        </a>
+    {% endfor %}
+
+{% endblock %}
