@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ parent() }}Season
+	{{ seasons.number }}
+	-
+	{{ program.title }}
+{% endblock %}
+{% block body %}
+	<div class="container mt-4">
+		<div>
+			<p>Season :{{ seasons.number }}</p>
+			<p>Year :{{ seasons.year }}</p>
+		</div>
+		<div>
+			<h2>Title :{{ program.title }}</h2>
+			<div>
+				<h3>Description of season{{ seasons.number }}</h3>
+				<p>{{ seasons.description }}</p>
+				<div>
+					{% for episode in episodes %}
+						<a href="{{ path('program_episode_show', {'programId': program.id, 'seasonId': seasons.id, 'episodeId' : episode.id}) }}">
+							<p>Episode{{ episode.number }}</p>
+					{% endfor %}
+				</div>
+				<div>
+					<a href="{{ path('program_index') }}">
+                        retour à la liste des séries
+					</a>
+				</div>
+			</div>
+		</div>
+    </div>    
+{% endblock %}
