@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\ProgramRepository;
 use App\Repository\SeasonRepository;
 use App\Repository\EpisodeRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
@@ -72,7 +73,6 @@ class ProgramController extends AbstractController
         ]);
     } 
 
-    #[Route("/{programId}/seasons/{seasonId}/episodes/{episodeId}", requirements: ['programId' => '\d+', 'seasonId' => '\d+', 'episodeId' => '\d+'], name: "episode_show", methods: ['GET'])]
 
     /**
      * This method is used to display an episode by id
@@ -82,8 +82,12 @@ class ProgramController extends AbstractController
      * @param Episode $episode
      * @return Response
      */
+    #[Route("/{programId}/seasons/{seasonId}/episodes/{episodeId}", requirements: ['programId' => '\d+', 'seasonId' => '\d+', 'episodeId' => '\d+'], name: "episode_show", methods: ['GET'])]
+    #[Entity('program', options: ['mapping' => ['programId' => 'id']])]
+    #[Entity('season', options: ['mapping' => ['seasonId' => 'id']])]
+    #[Entity('episode', options: ['mapping' => ['episodeId' => 'id']])]
     
-     public function showEpisode(Program $program, Season $season, Episode $episode): Response 
+    public function showEpisode(Program $program, Season $season, Episode $episode): Response 
      {
         if (!$program) {
             throw $this->createNotFoundException(
