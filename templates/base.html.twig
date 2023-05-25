@@ -19,6 +19,11 @@
     <header>
 			{% include "_navbar.html.twig" %}
     </header>
-        {% block body %}{% endblock %}
+        {% block body %}
+            <div class="container">{{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button type="submit">Add category</button>
+            {{ form_end(form) }}
+        {% endblock %}
     </body>
 </html>
