@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use Faker\Factory;
 use App\Entity\Season;
+use App\DataFixtures\ProgramFixtures;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -21,15 +22,18 @@ class SeasonFixtures extends Fixture implements DependentFixtureInterface
         */
         
         for($i = 0; $i < 20; $i++) {
-            $season = new Season();
-            //Ce Faker va nous permettre d'alimenter l'instance de Season que l'on souhaite ajouter en base
-            $season->setNumber($faker->numberBetween(1, 10));
-            $season->setYear($faker->year());
-            $season->setDescription($faker->paragraphs(3, true));
+            $programReference = 'program_' . $i;
+            for ($j = 0; $j < 5; $j++){
+                $season = new Season();
+                //Ce Faker va nous permettre d'alimenter l'instance de Season que l'on souhaite ajouter en base
+                $season->setNumber($faker->numberBetween($j + 1));
+                $season->setYear($faker->year());
+                $season->setDescription($faker->paragraphs(3, true));
 
-            $season->setProgram($this->getReference('program_' . $faker->numberBetween(0, 5)));
-            $this->addReference('season_' . $i, $season);
-            $manager->persist($season);
+                $season->setProgram($this->getReference($programReference));
+                $this->addReference('season_' . $i .'_'. $j, $season);
+                $manager->persist($season);
+            }
         }
 
         $manager->flush();

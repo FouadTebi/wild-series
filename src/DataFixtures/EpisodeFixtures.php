@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use Faker\Factory;
 use App\Entity\Episode;
+use App\DataFixtures\SeasonFixtures;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -21,17 +22,22 @@ class EpisodeFixtures extends Fixture implements DependentFixtureInterface
         */
 
         for($i = 0; $i < 20; $i++) {
-            $episode = new Episode();
-            //Ce Faker va nous permettre d'alimenter l'instance de Season que l'on souhaite ajouter en base
-            $episode->setTitle($faker->sentence());
-            $episode->setNumber($faker->numberBetween(1, 10));
-            $episode->setSynopsis($faker->paragraphs(3, true));
-            $randomSeasonNumber = $faker->numberBetween(1, 10);
-            //$episode->setSeason($this->getReference($seasonReference));
+            for ($j = 0; $j < 5; $j++){
+                $seasonReference = 'season_' . $i . '_' . $j;
+                for ($k = 0; $k < 10; $k++) {
+                    $episode = new Episode();
+                    //Ce Faker va nous permettre d'alimenter l'instance de Season que l'on souhaite ajouter en base
+                    $episode->setTitle($faker->sentence());
+                    $episode->setNumber($faker->numberBetween($k + 1));
+                    $episode->setSynopsis($faker->paragraphs(3, true));
+                    //$randomSeasonNumber = $faker->numberBetween(1, 10);
+                    //$episode->setSeason($this->getReference($seasonReference));
 
-            $episode->setSeason($this->getReference('season_' . $randomSeasonNumber));
+                    $episode->setSeason($this->getReference($seasonReference));
 
-            $manager->persist($episode);
+                    $manager->persist($episode);
+                }
+            }
         }
 
         $manager->flush();
