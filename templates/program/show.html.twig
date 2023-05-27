@@ -20,6 +20,18 @@
                     </li>
                 {% endfor %}
             </ul>
+            <ul>    
+                {% for actor in program.actors %}
+                    <li>
+                        <a href="{{ path('actor_show', {'id': actor.id}) }}">
+                            {{actor.firstname }} {{actor.lastname }}
+                        </a>
+                    </li>
+
+                {% else %}
+                    <p>Aucun acteur trouvé pour cette série.</p>
+                {% endfor %}
+            </ul>
         </div>
     </div>         
     <a href="{{ path('program_index') }}">

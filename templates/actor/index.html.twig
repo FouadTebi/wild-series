@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les acteurs{% endblock %}
+
+{% block body %}
+
+<h1> Tous les acteurs :</h1>
+
+{% for actor in actors %}
+
+<ul>
+<li> {{actor.firstname}} {{actor.lastname}}</li>
+<a href="{{ path('actor_show', { id: actor.id }) }}">Lien vers ses series</a>
+</ul> 
+
+{% else %}
+        Aucun acteur trouvé.
+
+{% endfor %}
+
+{% endblock %}
