@@ -42,6 +42,7 @@ class CategoryController extends AbstractController
             // For example : persiste & flush the entity
             // And redirect to a route that display the result
             $categoryRepository->save($category, true);
+            $this->addFlash('success', "La catégorie a été ajouté !");
 
             // Redirect to categories list
             return $this->redirectToRoute('category_index');
