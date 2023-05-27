@@ -19,6 +19,13 @@
     <header>
 			{% include "_navbar.html.twig" %}
     </header>
+        {% for category, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ category }} mt-4">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
         {% block body %}
             <div class="container">{{ form_start(form) }}
             {{ form_widget(form) }}
