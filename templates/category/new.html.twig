@@ -3,8 +3,12 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
+<div class="container mt-4">
     {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button type="submit">Add category</button>
+    {# {{ form_widget(form) }} #}
+    {{ form_row(form.name, {'attr': {'class': 'form-control'}}) }}
+    <button type="submit" class="mt-4 btn btn-primary" style="background-color: #0074d9; color: #ffffff;">Add category</button>
+
     {{ form_end(form) }}
+</div>    
 {% endblock %}
