@@ -24,7 +24,7 @@ class Program
     #[Assert\NotBlank(message: 'Merci de remplir le champs titre')]
     #[Assert\Length(
         max: 255,
-        maxMessage: 'La titre saisie {{ value }} est trop longue, elle ne devrait pas dépasser {{ limit }} caractères',
+        maxMessage: 'Le titre saisie {{ value }} est trop longue, elle ne devrait pas dépasser {{ limit }} caractères',
     )]
     
     private ?string $title = null;
