@@ -2,6 +2,7 @@
 // src/Controller/ProgramController.php
 namespace App\Controller;
 
+use App\Service\ProgramDuration;
 use App\Entity\Season;
 use App\Entity\Episode;
 use App\Entity\Program;
@@ -13,9 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
@@ -39,7 +41,7 @@ class ProgramController extends AbstractController
     }
 
     #[Route('/new', name: 'new')]
-    public function new(Request $request, ProgramRepository $programRepository) : Response
+    public function new(Request $request, ProgramRepository $programRepository, SluggerInterface $slugger) : Response
     {
         // Create a new Category Object
         $program = new Program();
@@ -52,6 +54,11 @@ class ProgramController extends AbstractController
             // Deal with the submitted data
             // For example : persiste & flush the entity
             // And redirect to a route that display the result
+
+            // Generate the slug
+            $slug = $slugger->slug($program->getTitle());
+            $program->setSlug($slug);
+            
             $programRepository->save($program, true);
 
             // Once the form is submitted, valid and the data inserted in database, you can define the success flash message
@@ -68,20 +75,23 @@ class ProgramController extends AbstractController
         ]);
     }
 
-    #[Route('/show/{id<^[0-9]+$>}', name: 'show')]
-    public function show(int $id, ProgramRepository $programRepository): Response
+    #[Route('/{slug}', name: 'show')]
+    public function show(string $slug, Program $program, ProgramRepository $programRepository, ProgramDuration $programDuration): Response
     {
-        $program = $programRepository->findOneBy(['id' => $id]);
+        $program = $programRepository->findOneBy(['slug' => $slug]);
         // same as $program = $programRepository->find($id);
 
         if (!$program) {
             throw $this->createNotFoundException(
-                'Aucune série avec le numéro : '.$id.' n\'a été trouvée dans la liste des séries.'
+                'Aucune série avec le numéro : '.$slug.' n\'a été trouvée dans la liste des séries.'
             );
         }
 
+        $duration = $programDuration->calculate($program);
+
         return $this->render('program/show.html.twig', [
             'program' => $program,
+            'duration' => $duration,
         ]);
     }
 

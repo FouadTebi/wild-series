@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\String\Slugger\SluggerInterface;
 use App\Repository\EpisodeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,6 +26,13 @@ class Episode
 
     #[ORM\ManyToOne(inversedBy: 'episodes')]
     private ?Season $season = null;
+
+    #[ORM\Column(nullable: false)]
+    private ?int $duration;
+
+     #[ORM\Column(length: 255)]
+    private ?string $slug = null;
+
 
     public function getId(): ?int
     {
@@ -75,6 +83,30 @@ class Episode
     public function setSeason(?Season $season): self
     {
         $this->season = $season;
+
+        return $this;   
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(int $duration): self
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

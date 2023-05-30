@@ -1,5 +1,23 @@
-controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
+#controllers:
+#    resource:
+#        path: ../src/Controller/
+#        namespace: App\Controller
+#    type: attribute
+
+app_controllers:
+  resource: "../src/Controller/"
+  type: annotation
+
+program_show:
+  path: "/programs/{slug}"
+  controller: 'App\Controller\ProgramController::show'
+  methods: ["GET"]
+  requirements:
+    slug: "[a-zA-Z0-9-_]+"
+
+episode_edit:
+  path: "/episode/{slug}/edit"
+  controller: 'App\Controller\EpisodeController::edit'
+  methods: ["GET", "POST"]
+  requirements:
+    slug: "[a-zA-Z0-9-]+"

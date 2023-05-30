@@ -8,11 +8,10 @@
         {{ form_row(form.poster, {'attr': {'class': 'form-control'}}) }}
         {{ form_row(form.country, {'attr': {'class': 'form-control'}}) }}
         {{ form_row(form.year, {'attr': {'class': 'form-control'}}) }}
-        {{ form_label(form.actors) }}
-        {{ form_widget(form.actors, {'attr': {'class': 'form-check-input'}, 'expanded': true, 'multiple': true}) }}
-        {{ form_errors(form.actors) }}
-
         {{ form_row(form.category, {'attr': {'class': 'form-control'}}) }}
+        {{ form_label(form.actors) }}
+        {{ form_widget(form.actors, {'attr': {'class': 'form-check-input-container'}, 'expanded': true, 'multiple': true}) }}
+        {{ form_errors(form.actors) }}
 
         <button type="submit" class="mt-4 btn btn-primary" style="background-color: #0074d9; color: #ffffff;">Add program</button>
     {{ form_end(form) }}

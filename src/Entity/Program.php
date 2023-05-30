@@ -41,10 +41,10 @@ class Program
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $poster = null;
 
-    #[ORM\ManyToOne(inversedBy: 'programs')]
+    #[ORM\ManyToOne(inversedBy: 'programs', targetEntity: Category::class, fetch:'EAGER', cascade:['PERSIST'])]
     private ?Category $category = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $country = null;
 
     #[ORM\Column]
@@ -55,6 +55,9 @@ class Program
 
     #[ORM\ManyToMany(targetEntity: Actor::class, mappedBy: 'programs')]
     private Collection $actors;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -196,5 +199,28 @@ class Program
         }
 
         return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+    public function getDuration(): int
+    {
+        $totalDuration = 0;
+        foreach ($this->seasons as $season) {
+            foreach ($season->getEpisodes() as $episode) {
+                $totalDuration += $episode->getDuration();
+            }
+        }
+
+        return $totalDuration;
     }
 }
