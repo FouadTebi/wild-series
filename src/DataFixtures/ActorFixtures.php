@@ -8,6 +8,8 @@ use App\Entity\Program;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use App\DataFixtures\CategoryFixtures;
+use App\DataFixtures\ProgramFixtures;
 
 class ActorFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -17,9 +19,9 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
 
         for ($i = 0; $i < 10; $i++) {
             $actor = new Actor();
-            $actor->setFirstname($faker->firstname());
-            $actor->setLastname($faker->lastname());
-            $birthDate = $faker->dateTimeBetween('-60 years', '-18 years');
+            $actor->setFirstname($faker->firstName());
+            $actor->setLastname($faker->lastName());
+            $birthDate = $faker->dateTimeBetween('-65 years', '-16 years');
             $actor->setBirthDate($birthDate);
             $manager->persist($actor);
 
@@ -33,9 +35,16 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             for ($j = 0; $j < 3; $j++) {
                 $program = new Program();
                 $program->setTitle($faker->sentence);
+                $program->setSynopsis($faker->sentence);
+                $program->setYear($faker->year());
+                $program->setCountry($faker->sentence);
+                $program->setSlug($faker->slug());
 
                 // Associez l'acteur au programme
                 $actor->addProgram($program);
+
+                // Appel explicite à persist() pour le programme
+                $manager->persist($program);
             }
 
             // Persistez l'acteur
@@ -49,6 +58,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
+           CategoryFixtures::class,
            ProgramFixtures::class,
         ];
     }

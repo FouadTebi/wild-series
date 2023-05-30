@@ -8,13 +8,20 @@ use App\DataFixtures\CategoryFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
+    private $slugger;
+
+    public function __construct(SluggerInterface $slugger)
+    {
+        $this->slugger = $slugger;
+    }
 
     public function load(ObjectManager $manager)
     {   
-           $faker = Factory::create();
+        $faker = Factory::create();
         
         for ($i = 0; $i < 20; $i++){
 
@@ -28,6 +35,9 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $categoryName = CategoryFixtures::CATEGORIES[$randomCategoryKey];
             $program->setCategory($this->getReference('category_' . $categoryName));
             $this->addReference('program_' . $i, $program);
+            // Générer le slug à partir du titre
+            $slug = $this->slugger->slug($program->getTitle())->lower();
+            $program->setSlug($slug);
             $manager->persist($program);
         }
         

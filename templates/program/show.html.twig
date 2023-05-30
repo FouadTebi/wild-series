@@ -8,7 +8,7 @@
         <div class="media-body">
             <h1 class="mt-0">{{ program.title }}</h1>
             <p>{{ program.synopsis }}</p>
-            <p>Catégorie : {{ program.category.name }}</p>
+            <p>Catégorie : {%if program.category.name is defined %} {{ program.category.name }} {% endif %}</p>
 
             <h2>Saisons disponibles :</h2>
             <ul>    
@@ -32,6 +32,8 @@
                     <p>Aucun acteur trouvé pour cette série.</p>
                 {% endfor %}
             </ul>
+
+            <p>Durée : {{ duration }}</p>
         </div>
     </div>         
     <a href="{{ path('program_index') }}">

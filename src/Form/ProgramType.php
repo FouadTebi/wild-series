@@ -21,14 +21,17 @@ class ProgramType extends AbstractType
             ->add('poster', TextType::class)
             ->add('country', TextType::class)
             ->add('year', IntegerType::class)
+            ->add('category', null, ['choice_label' => 'name'])
             ->add('actors', EntityType::class, [
                 'class' => Actor::class,
-                'choice_label' => 'fullname',
+                'choice_label' => function (Actor $actor) {
+                    return $actor->getFirstname() . ' ' . $actor->getLastname();
+                },
                 'multiple' => true,
                 'expanded' => true,
+                'by_reference' => false,
                 'attr' => ['class' => 'form-control'],
             ])
-            ->add('category', null, ['choice_label' => 'name'])
         ;
     }
 
