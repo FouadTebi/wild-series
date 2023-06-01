@@ -1,0 +1,20 @@
+{% extends "emailLayout.html.twig" %}
+
+{% block emailTitle %}
+    {{ episode.title }}
+{% endblock %}
+
+{% block itemTitle %}
+    {{ episode.title }}
+{% endblock %}
+
+{% block itemSynopsis %}
+    {{ episode.synopsis }}
+{% endblock %}
+
+{% block itemLink %}
+    <p>Épisode: {{ episode.number }} de la série: {{ episode.season.program.title }}</p>
+   <p>lien vers l'épisode <a href="http://127.0.0.1:8000{{ path('app_episode_show', {slug: episode.slug}) }}">Voir</a></p>
+
+
+{% endblock %}
