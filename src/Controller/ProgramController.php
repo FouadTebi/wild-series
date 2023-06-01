@@ -2,15 +2,17 @@
 // src/Controller/ProgramController.php
 namespace App\Controller;
 
-use App\Service\ProgramDuration;
 use App\Entity\Season;
 use App\Entity\Episode;
 use App\Entity\Program;
 use App\Form\ProgramType;
+use App\Service\ProgramDuration;
+use Symfony\Component\Mime\Email;
 use App\Repository\SeasonRepository;
 use App\Repository\EpisodeRepository;
 use App\Repository\ProgramRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -41,7 +43,7 @@ class ProgramController extends AbstractController
     }
 
     #[Route('/new', name: 'new')]
-    public function new(Request $request, ProgramRepository $programRepository, SluggerInterface $slugger) : Response
+    public function new(Request $request, ProgramRepository $programRepository, SluggerInterface $slugger, MailerInterface $mailer) : Response
     {
         // Create a new Category Object
         $program = new Program();
@@ -60,6 +62,14 @@ class ProgramController extends AbstractController
             $program->setSlug($slug);
             
             $programRepository->save($program, true);
+
+            $email = (new Email())
+                ->from($this->getParameter('mailer_from'))
+                ->to('your_email@example.com')
+                ->subject('Une nouvelle série vient d\'être publiée !')
+                ->html($this->renderView('Program/newProgramEmail.html.twig', ['program' => $program]));
+
+            $mailer->send($email);
 
             // Once the form is submitted, valid and the data inserted in database, you can define the success flash message
             $this->addFlash('success', 'La série a été ajoutée!');
