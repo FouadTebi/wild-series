@@ -7,6 +7,7 @@
         <img class="align-self-start mr-3" src="{{program.poster}}" alt="{{ program.title }} poster">
         <div class="media-body">
             <h1 class="mt-0">{{ program.title }}</h1>
+            <img src="{{ vich_uploader_asset(program) }}" alt="{{ program.title }}">
             <p>{{ program.synopsis }}</p>
             <p>Catégorie : {%if program.category.name is defined %} {{ program.category.name }} {% endif %}</p>
 

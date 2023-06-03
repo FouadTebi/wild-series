@@ -5,7 +5,7 @@
 {% block body %}
 
 <h1> Liste des séries de {{actor.firstname}} {{actor.lastname}} </h1>
-
+<img src="{{ vich_uploader_asset(actor) }}" alt="{{ actor.firstname }}">
 {% for program in actor.programs %}
     <ul>
         <li><a href="{{ path('program_show', { 'slug': program.slug }) }}">{{ program.title }}</a></li>
