@@ -20,4 +20,4 @@ episode_edit:
   controller: 'App\Controller\EpisodeController::edit'
   methods: ["GET", "POST"]
   requirements:
-    slug: "[a-zA-Z0-9-]+"
+    slug: "[a-zA-Z0-9-]+"    
