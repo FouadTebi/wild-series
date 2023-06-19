@@ -21,8 +21,10 @@
                     <td>{{ comment.comment }}</td>
                     <td>{{ comment.rate }}</td>
                     <td>
-                        <a href="{{ path('app_comment_show', {'id': comment.id}) }}">show</a>
-
+                        <a href="{{ path('comment_show', {'id': comment.id}) }}">show</a>
+                        {% if is_granted('ROLE_ADMIN') or comment.author == app.user %}
+                            {{ include('comment/_delete.html.twig', {'id': comment.id}) }}
+                        {% endif %}    
                     </td>
                 </tr>
             {% else %}

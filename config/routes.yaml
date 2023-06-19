@@ -20,4 +20,16 @@ episode_edit:
   controller: 'App\Controller\EpisodeController::edit'
   methods: ["GET", "POST"]
   requirements:
-    slug: "[a-zA-Z0-9-]+"    
+    slug: "[a-zA-Z0-9-]+"
+
+comment_show:
+  path: /comment/{id}
+  controller: 'App\Controller\CommentController::show'
+  methods: ["GET"]
+
+comment_edit:
+  path: "/comment/{id}/edit"
+  controller: 'App\Controller\CommentController::edit'
+  methods: ["GET", "POST"]
+  requirements:
+    id: '\d+'

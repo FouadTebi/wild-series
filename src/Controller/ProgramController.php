@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Season;
 use App\Entity\Episode;
 use App\Entity\Program;
+use App\Entity\Category;
 use App\Form\ProgramType;
 use App\Service\ProgramDuration;
 use Symfony\Component\Mime\Email;
@@ -20,6 +21,8 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
@@ -61,6 +64,7 @@ class ProgramController extends AbstractController
             $slug = $slugger->slug($program->getTitle());
             $program->setSlug($slug);
             
+            $program->setOwner($this->getUser());
             $programRepository->save($program, true);
 
             $email = (new Email())
@@ -170,5 +174,40 @@ class ProgramController extends AbstractController
             'seasons' => $season,
             'episodes' => $episode,
         ]);
+    }
+
+    #[Route('/{slug}/edit', name: 'program_edit', methods: ['GET', 'POST'])]
+    #[Route('/', name: 'app_home')]
+    #[ParamConverter('program', options: ['mapping' => ['slug' => 'slug']])]
+
+    public function edit(Request $request, Program $program, ProgramRepository $programRepository, SluggerInterface $slugger): Response
+    {
+        if ($this->getUser() !== $program->getOwner()) {
+            // If not the owner, throws a 403 Access Denied exception
+            throw $this->createAccessDeniedException('Only the owner can edit the program!');
+        }
+        $form = $this->createForm(ProgramType::class, $program);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $slugger->slug($program->getTitle());
+            $program->setSlug($slug);
+            $programRepository->save($program, true);
+            $this->addFlash('success', 'Program updated successfully!');
+            return $this->redirectToRoute('program_index');
+        }
+        return $this->render('program/edit.html.twig', [
+            'program' => $program,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
+    public function delete(Request $request, Program $program, ProgramRepository $programRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $program->getId(), $request->request->get('_token'))){
+            $programRepository->remove($program, true);
+            $this->addFlash('danger', 'Program deleted successfully!');
+        }
+        return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
     }
 }

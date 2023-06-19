@@ -22,6 +22,8 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {   
         $faker = Factory::create();
+        $admin = $this->getReference('admin');
+        $contributor = $this->getReference('contributor');
         
         for ($i = 0; $i < 20; $i++){
 
@@ -35,6 +37,8 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $categoryName = CategoryFixtures::CATEGORIES[$randomCategoryKey];
             $program->setCategory($this->getReference('category_' . $categoryName));
             $this->addReference('program_' . $i, $program);
+            $user = $i % 2 === 0 ? $contributor : $admin;
+            $program->setOwner($user);
             // Générer le slug à partir du titre
             $slug = $this->slugger->slug($program->getTitle())->lower();
             $program->setSlug($slug);
