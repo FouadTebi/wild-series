@@ -25,10 +25,6 @@
           <a class="nav-link text-white" href="{{ path('actor_index') }}">Acteurs</a>
         </li>
       </ul>
-      <ul class="navbar-nav">
-        <li class="nav-item text-white">
-          <a class="nav-link text-white" href="#">Inscription</a>
-        </li>
         {% if app.user %}
           {{ app.user.email }}
           <form action="{{ path('app_logout') }}" method="post">
@@ -38,6 +34,10 @@
         <ul>
           <a href="{{ path('app_login') }}" class="nav-link text-white">Se connecter</a>
         </ul>
+        <ul class="navbar-nav">
+        <li class="nav-item text-white">
+          <a class="nav-link text-white" href="{{ path('app_security') }}">Inscription</a>
+        </li>
         {% endif %}
     </div>
   </div>
