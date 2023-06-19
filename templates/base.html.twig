@@ -15,22 +15,25 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body {{ stimulus_controller('theme') }} {{ stimulus_target('theme', 'body') }}>
-    <header>
-			{% include "_navbar.html.twig" %}
-    </header>
-        {% for category, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ category }} mt-4">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-        {% block body %}
-            <div class="container">{{ form_start(form) }}
-            {{ form_widget(form) }}
-            <button type="submit">Add category</button>
-            {{ form_end(form) }}
-        {% endblock %}
+    <body {{ stimulus_controller('symfony/ux-swup/swup') }}>
+        
+            <header>
+		        {% include "_navbar.html.twig" %}
+            </header>
+                {% for category, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ category }} mt-4">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+        <div id="swup">
+            {% block body %}
+                <div class="container">{{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button type="submit">Add category</button>
+                {{ form_end(form) }}
+            {% endblock %}
+        </div>
     </body>
 </html>
